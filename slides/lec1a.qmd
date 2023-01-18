@@ -110,11 +110,23 @@ My aim is to deliver each and every lecture and lab in person this term. Your ex
 
 . . . 
 
-If you are ill, please stay home. I will do my best to record lectures and have them available to you in Brightspace. 
+If you are ill, please stay home. My slides and exercises are wordy, and you can come to office hours to catch up.
 
 . . . 
 
 If I am ill, I will either hold class on Zoom or record a lecture for you to watch asynchronously.
+
+## Your textbooks
+
+::: {.r-stack}
+![](images/cover-r4ds.png){.fragment width="170" height="300"}
+
+![](images/dv-cover.jpeg){.fragment width="200" height="300"}
+
+![](images/ims-cover.png){.fragment width="200" height="300"}
+![](images/dsur-cover.png){.fragment width="200" height="300"}
+
+:::
 
 ## Sharing and reusing code
 
