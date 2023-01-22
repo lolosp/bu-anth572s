@@ -32,3 +32,5 @@ install.packages(pkg.list)
 remotes::install_github("geanes/bioanth")
 remotes::install_github("benmarwick/binford") 
 remotes::install_github("benmarwick/evoarchdata") 
+remotes::install_github("jvcasillas/untidydata") 
+
