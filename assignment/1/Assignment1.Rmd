@@ -1,0 +1,100 @@
+---
+title: "Assignment 1 - Exploratory Data analysis"
+author: "Your-name-here"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE) # leave this option please! 
+```
+
+## Set up 
+
+In this analysis, you will be using a dataset which records the hunting returns of individual Ache men. Data were recorded between 1981 and 2007. The data lives in the `rethinking` package, but it is included here as a separate `.csv` file. Start by loading the packages you will need to explore the data: `tidyverse` and `table1`, as well as the data (I'll write the code to read in the data for you).  
+
+```{r}
+ache <- read.csv("assignment/1/ache-hunting.csv")
+
+library(tidyverse)
+library(table1)
+
+```
+
+## 1. Getting familiar with the data
+
+Start by taking a look at the structure of the dataframe and the first few rows. The `datatype` column is coded as follows: 1 if the duration of the trip was known; and 3 if the duration of the trip was not know.
+
+#### Q1.1. What is the unit of observation for this dataframe? What variables are recorded about the unit of observation? 
+
+```{r}
+
+```
+
+#### Q1.2. What are the vector and variable types for the following variables: `age`, `kg.meat`, `hours`, and `datatype`? 
+
+
+#### Q1.3. Are the vector types appropriate for each of the variable types? If not, coerce the variables to better-suited vector types. 
+Hint: To save a new variable in a dataframe, use the mutate function from the tidyverse exercise of week 1 or save a new variable using the following syntax: `dataframe$newvar <- function(dataframe$oldvar)` 
+
+```{r}
+
+
+```
+
+## 2. Summary statistics 
+
+Create a set of summary statistics for the following variables: `age`, `kg.meat`, `hours`, and `datatype` using the`table1` package. 
+
+#### Q2.1. Set informative labels for each of these variables 
+
+```{r}
+
+```
+
+#### Q2.2. Produce a table that summarizes these variables. 
+
+Hint: make sure that the output summaries make sense for the different types of variables. If not, consider adjusting the variable types, either by coercing them before using `table1` or by coercing them inside the `table1` function. 
+
+```{r}
+
+
+```
+
+#### Q2.3. Use the table to answer the following questions: On average, how old are the hunters who engage in these hunts on average? How old are the youngest and the oldest huntere recorded in the dataset? What age range includes 68% of observations in this dataset?
+
+
+#### Q2.4. Look at the summary statistics for `kg.meat`. Are the mean and standard deviation similar? What does this suggest about the distribution of the data? 
+
+
+#### Q2.5. Create two count table: one for year, and the other for month. Was the data collected evenly over the study period? Is there any seasonality in the observations i.e., does the data disproportionately cover certain months? 
+
+```{r}
+
+```
+
+
+## 3. Data visualization 
+
+#### Q3.1. Check your intuition about the distribution of the data for `kg.meat`. Consider the type and number of the variable(s) that you are trying to plot to select the correct visualization. Make sure you set a binwidth that makes sense in this context. 
+
+Hint: Consider that this variable measures the return of a hunt conducted by a single hunter, and that 1 kg = ~2lb.
+
+```{r}
+ggplot(ache, aes(x = kg.meat))+
+  geom_histogram(binwidth = 5)
+
+```
+
+#### Q3.2. Perhaps skill of the hunter increases the chance that a hunt will be successful, such that older hunters tend to return more meat? To explore this, make a plot that shows the relationship between the age of the hunter (x-axis) and the amount of meat returned by a hunt (y-axis). Then add both scattergram and smoothed linear regression line to the plot. Add an informative title and appropriate axes labels. 
+
+```{r}
+
+
+```
+
+
+#### Q3.3. Using the plot you've just produced, do you think that there is a relationship between age of the hunter and the yield of the hunt? 
+
+
+
