@@ -737,5 +737,3 @@ p2 + geom_point(aes(color = species))+ geom_smooth(method = "lm")
 ![](images/knit-export.png)
 
 
-
-
