@@ -2,6 +2,7 @@
 
 pkg.list <- c("tidyverse", 
               "archdata",
+              "binford",
               "BSDA",
               "chemometrics",
               "dagitty",
