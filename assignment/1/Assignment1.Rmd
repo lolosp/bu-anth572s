@@ -64,10 +64,10 @@ Hint: make sure that the output summaries make sense for the different types of 
 #### Q2.3. Use the table to answer the following questions: On average, how old are the hunters who engage in these hunts on average? How old are the youngest and the oldest huntere recorded in the dataset? What age range includes 68% of observations in this dataset?
 
 
-#### Q2.4. Look at the summary statistics for `kg.meat`. Are the mean and standard deviation similar? What does this suggest about the distribution of the data? 
+#### Q2.4. Look at the summary statistics for `kg.meat`. Are the mean and median  similar? What does this suggest about the distribution of the data? 
 
 
-#### Q2.5. Create two count table: one for year, and the other for month. Was the data collected evenly over the study period? Is there any seasonality in the observations i.e., does the data disproportionately cover certain months? 
+#### Q2.5. Create two separate count tables: one for year, and the other for month. Was the data collected evenly over the study period? Is there any seasonality in the observations i.e., does the data disproportionately cover certain months? 
 
 ```{r}
 
