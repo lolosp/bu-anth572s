@@ -1,0 +1,172 @@
+---
+title: "Z and t tests for means of samples"
+author: "Your-name-here"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
+## Z tests and t tests 
+
+In this exercise, you will receive multiple scenarios which involve testing hypotheses about means of samples. Read the example carefully, and decide whether you will need a z test or a t test. Then, conduct the process of hypothesis testing for each example. Base code for plotting is provided, make sure to adapt it with the appropriate critical values and regions. 
+
+
+## Problem 1
+
+A recent article in *The Wall Street Journal* reported that the prime rate for large banks is now at 9 percent (jeepers!). Small banks tend to offer higher prime rates because of their smaller lending power. A sample of 8 small banks in the Midwest revealed the following prime rates. At the 0.01 significance level, can we conclude that the prime rate for small banks is greater than that of large banks?
+
+
+```{r}
+primes <- c( 10.1, 9.3, 9.2, 10.2, 9.3, 9.6, 9.4, 8.8)
+```
+
+### 1. State the null and alternate hypotheses 
+
+
+### 2. Determine the characteristics of the comparison distribution. 
+
+
+### 3. Determine the critical values
+
+
+#### 3.1. Is this a one tailed or two tailed test?
+
+#### 3.2. Determine which amount of the probability distribution should fall on each end of the distribution
+
+#### 3.3. Determine which type of test you should use
+
+#### 3.4. Calculate which test values (the critical values) correspond to these amounts of the probability distribution.
+
+```{r}
+
+
+```
+
+#### 3.4. Modify the following plot to show your critical values
+
+```{r}
+
+ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
+  stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1))+
+  geom_area(stat = 'function', fun = dnorm, args = list(mean = 0, sd = 1), fill = "red", alpha = 0.4, xlim = c(-4, -1.64))+ # modify the xlim argument 
+  geom_area(stat = 'function', fun = dnorm, args = list(mean = 0, sd = 1), fill = "red", alpha = 0.4, xlim = c(-4, -1.64))+ # modify the xlim argument
+  scale_x_continuous(breaks = seq(-4,4,1))+ labs(x = "", y = "proportion")+
+  theme_minimal()+
+  ggtitle("Red = region for rejection of null")
+
+
+```
+
+### 4. Calculate the test value 
+
+#### 4.1. Calculate the sample mean and standard deviation 
+
+```{r}
+
+
+```
+
+#### 4.2. Calculate the test value for your sample 
+
+
+#### 4.2. Conduct the test: 
+```{r}
+
+```
+
+
+
+
+### 5. Decide whether to reject the null
+
+#### 5.1. Copy and paste the plot code you've created for the critical regions, then and add a vertical line to show your test value - use `geom_vline(xintercept = testvalue)`
+
+```{r}
+
+
+```
+
+#### 5.2. State your conclusion 
+
+
+
+
+
+## Problem 2
+
+A manufacturer of a new tire for the Toyota Landcruiser, a popular vehicle for driving in the bush in Africa, claims that its tires can be driven 60,000 miles before the tread wears out. The standard deviation for this mean is 5,000 miles. The NGO you work for bought 48 tires and found that the mileage these tires are able to withstand before wearing out is 59,500. Is your employer's experience of the tire tread longevity different from that claimed by the manufacturer at the 0.05 significance level?
+
+
+### 1. State the null and alternate hypotheses 
+
+
+### 2. Determine the characteristics of the comparison distribution. 
+
+
+### 3. Determine the critical values
+
+
+#### 3.1. Is this a one tailed or two tailed test?
+
+#### 3.2. Determine which amount of the probability distribution should fall on each end of the distribution
+
+#### 3.3. Determine which type of test you should use
+
+#### 3.4. Calculate which test values (the critical values) correspond to these amounts of the probability distribution.
+
+```{r}
+
+
+```
+
+#### 3.4. Modify the following plot to show your critical values
+
+```{r}
+
+ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
+  stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1))+
+  geom_area(stat = 'function', fun = dnorm, args = list(mean = 0, sd = 1), fill = "red", alpha = 0.4, xlim = c(-4, -1.64))+ # modify the xlim argument 
+  geom_area(stat = 'function', fun = dnorm, args = list(mean = 0, sd = 1), fill = "red", alpha = 0.4, xlim = c(-4, -1.64))+ # modify the xlim argument
+  scale_x_continuous(breaks = seq(-4,4,1))+ labs(x = "", y = "proportion")+
+  theme_minimal()+
+  ggtitle("Red = region for rejection of null")
+
+
+```
+
+### 4. Calculate the test value 
+
+#### 4.1. Calculate the sample mean and standard deviation 
+
+```{r}
+
+
+```
+
+#### 4.2. Calculate the test value for your sample 
+
+
+#### 4.2. Conduct the test: 
+```{r}
+
+```
+
+
+
+
+### 5. Decide whether to reject the null
+
+#### 5.1. Copy and paste the plot code you've created for the critical regions, then and add a vertical line to show your test value - use `geom_vline(xintercept = testvalue)`
+
+```{r}
+
+
+```
+
+#### 5.2. State your conclusion 
+
