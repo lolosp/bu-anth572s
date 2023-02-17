@@ -1,0 +1,207 @@
+---
+title: 'Exercise 5b: Choosing between T-tests'
+author: "Your-name-here"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(openintro)
+library(tidyverse)
+library(car)
+library(archdata)
+library(datarium)
+```
+
+## Problem 1
+
+An instructor decided to run two slight variations of the same exam. Prior to passing out the exams, they shuffled the exams together to ensure each student received a random version. Anticipating complaints from students, they would like to evaluate whether the difference observed in the groups is so large that it provides convincing evidence that one test was more difficult (on average) than the other. 
+
+The scores for the tests come from the `classdata` data frame, which is contained in the `openintro` libray. The dataframe has been reshaped for you, and two smaller datasets have been created which contain only the scores for one test. These are `test.a` and `test.b` as described below:
+
+```{r}
+classdata <- classdata
+classdata <- filter(classdata, lecture %in% c("a", "b"))%>% 
+  rename(test = lecture, score = m1)
+
+test.a <- filter(classdata, test == "a") 
+test.b <- filter(classdata, test == "b")
+
+```
+
+
+#### Q1.1. Make a boxplot showing the distribution of test scores by the two different versions 
+
+Hint: use the `classdata` dataframe, and use `head()` or `str()` to get a sense for what the dataframe looks like
+
+```{r}
+ggplot(--- , aes(x = --- , y = --- , color = --- ))+
+  geom_boxplot()+
+  geom_jitter(width = 0.10) # adds the points so you can visualize the data
+
+```
+
+
+
+#### Q1.2. State the null and alternate hypotheses. Go back to the problem statement if you don't remember the problem.
+
+
+
+#### Q1.3. What are the assumptions for a t-test?
+
+
+#### Q1.4. Check whether the data is normally distributed using a QQ plot.
+
+```{r}
+qqPlot(test.a$score)
+qqPlot(---)
+
+```
+
+#### Q1.5. Use a formal test to check the normality of the data. 
+
+```{r}
+shapiro.test(test.a$score)
+shapiro.test(--- )
+```
+
+#### Q1.6. Using the information from Q1.4. and Q1.5., what do you conclude about the normality of the scores? Is the normality assumption met?
+
+
+#### Q1.7. Check the homogeneity of variances using a formal test. What do you conclude about the homogeneity of variances? Is the assumption met?
+
+
+```{r}
+leveneTest(--- ~ ---, data = ---)
+```
+
+#### Q1.8. Return to the null and alternate hypotheses. Given what you've learned from your data exploration, what kind of test should you use to evaluate your null hypothesis? 
+
+
+
+#### Q1.7. Perform the test
+
+```{r}
+t.test(--- ~ ---, data = ---, var.equal = ---)
+```
+
+#### Q1.8. Evaluate your evidence. What do you conclude about your null hypothesis?
+
+
+
+
+## Problem 2. 
+
+The Snodgrass site is a Missisipian site in Missouri that was occupied around 1300-1420 AD by an agricultural society that focuses on maize cultivation. The site is fortified, meaning that an outer wall encloses the entire site. The site contains 91 pit houses. Some of these are located within a second wall, which provides an additional layer of protection. 
+
+Researchers think that the houses inside the inner fortified wall might belong to families of higher status than those located outside the inner fortified wall. Researchers are considering that the size of the house reflects status in this community, where higher status families tend to build larger houses.
+
+The data is located in the `archdata` package. Each observation is a house. The  size of the house is recorded in the variable `Inside` and the area of the house is stored in the variable `Area`.
+
+
+```{r}
+data(Snodgrass)
+str(Snodgrass)
+```
+
+#### Q2.1. How many houses are located inside and outside the wall?
+Hint: there are multiple ways to do this
+
+```{r}
+
+```
+
+#### Q2.2 State your null and alternate hypotheses
+
+
+#### Q2.3. Test the first assumption: normality
+
+```{r}
+
+
+```
+
+
+#### Q2.4. Test the second assumption: homogeneity of variances
+
+```{r}
+
+```
+
+
+#### Q2.5. Based on your assumptions test, which kind of test should you use?
+
+
+
+#### Q2.6. Calculate the test
+
+```{r}
+t.test(--- ~ ---, data = ---, var.equal = ---)
+```
+
+#### Q2.7. Evaluate the results of the test and conclude on your null hypothesis
+
+
+
+
+
+## Problem 3. 
+
+Ten mice are given an experimental medication. One of the potential side effects that researchers are worried about is weight changes. They give the treatment to 10 mice, recording their weight before and after the treatment. The data is stored in the `mice2` dataset
+
+```{r}
+mice2
+```
+
+#### Q3.1. What kind of t-test do you think you should use? 
+
+Paired samples t-test
+
+#### Q3.2. Calculate the difference between the two observations so that an increase in weight is reflected as a positive value. Store the result in a new column in the `mice2` dataset called `d`. 
+
+Hint: There are multiple ways to do this
+
+```{r}
+
+
+```
+
+#### Q3.3. State your null and alternate hypotheses
+
+H~0~: The difference in mean weight before and after the treatment is 0/ There is no difference in mean weight before and after the treatment 
+H~1~: The difference in mean weight before and after the treatment is not 0/ There is a difference in mean weight before and after the treatment
+
+
+#### Q3.4. Calculate your critical values, setting alpha at 0.5
+
+```{r}
+qt()
+```
+
+#### Q3.5. Calculate your test value
+
+Hint: the formula is $\bar{d}$/(sd/sqrt(n))
+
+```{r}
+mean(mice2$d)/(sd(mice2$d)/sqrt(10))
+```
+
+#### Q3.6. Conclude on your null hypothesis:
+
+We reject the null hypothesis
+
+
+#### Q3.7. Try an simpler way to calculate the test - you can perform a paired t-test with the t.test function. Specify the two vectors, and set the `paired` argument to TRUE.
+
+```{r}
+t.test(---, ---, paired = ---)
+```
+
+
+## Attribution
+
+Example datasets taken from:
+
+- Example 1: [Introduction to Modern Statistics](https://openintro-ims.netlify.app/)
+- Example 2: Quantitative methods in archaeology by David L. Carlson
+
