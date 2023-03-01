@@ -1,0 +1,172 @@
+---
+title: 'Assignment 3: Comparing groups'
+author: "Your-name-here"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(car)
+```
+
+
+## Problem 1: Price of wine
+
+Every year, Wine Magazine publishes information on wines sold in the US. A subset of the data is available in the `wine` dataset, which contains inforamtion on 150 randomly selected wines from each of three countries: France, Italy, and the US. We are interested in knowing whether wines from the three countries differ in price. 
+
+Start by loading the dataset: 
+
+```{r}
+wine <- read.csv("winemag-subsetdata.csv")
+```
+
+#### Q1.1. Visualize the distribution of `price` across each of the three countries. There are multiple possible ways to do this! 
+
+```{r}
+
+```
+
+
+#### Q1.2. Based on your visualization, do the data look normally distributed? Use an appropriate statistical test to check this. 
+
+
+
+```{r}
+
+```
+
+
+#### Q1.3. Based on the results of your tests, and what you know about the variables you are interested in, what kind of test should you use? 
+
+
+
+
+#### Q1.4. State your null and alternate hypotheses
+
+H~0~: 
+H~1~:
+
+
+#### Q1.5. Conduct the test
+
+```{r}
+
+```
+
+#### Q1.6. Conclude on your null hypothesis
+
+
+
+
+
+## Problem 2: Height in the MLB
+
+We have a dataset which lists the heights and weights of players in the MLB according to the position that they play. We are interested in differences in height between starting pitchers and first basemen. 
+
+#### Q2.1. Read in the data, and trim it down to contain only the players who play either as starting pitchers or first baseman 
+
+```{r}
+mlb <- read.csv("MLB-anthrops.csv")
+
+--- 
+```
+
+
+#### Q2.2. Plot the distribution of `height` across the positions. There are multiple possible ways to do this! 
+
+```{r}
+
+```
+
+#### Q2.3. Based on your visualization, do the data look normally distributed? Use an appropriate statistical test to check this. 
+
+
+
+```{r}
+
+```
+
+#### Q2.4. Based on the results of your tests, and what you know about the variables you are interested in, what kind of test should you use? 
+
+
+
+#### Q2.5. State your null and alternate hypotheses
+
+H~0~: 
+H~1~: 
+
+
+
+#### Q1.5. Conduct the test
+
+```{r}
+```
+
+#### Q1.6. Conclude on your null hypothesis
+
+
+
+
+## Problem 3: Sodium intake across three groups
+
+
+Three groups of students have been taking nutrition classes. Each group is taught by a different instructor, who is teaching slightly different content. We want to know if the content of each version of the course has influenced the students differently. Specifically, we want to know whether sodium intake varies across the students who take different versions of the course. 
+
+The data are contained in the `nutrition` dataset 
+
+
+```{r}
+nutrition <- read.csv("class-nutrition.csv")
+```
+
+#### Q3.1. Visualize the distribution of `sodium` across each of the three classes There are multiple possible ways to do this! 
+
+```{r}
+
+```
+
+#### Q3.2. Based on your visualization, do the data look normally distributed? Use an appropriate statistical test to check this.  
+
+```{r}
+
+```
+
+#### Q3.3. Based on the results of your tests, and what you know about the variables you are interested in, what kind of test should you use? 
+
+
+
+
+#### Q3.4. State your null and alternate hypotheses
+
+H~0~: 
+H~1~: 
+
+
+#### Q3.5. Check any additional assumptions needed
+
+```{r}
+
+```
+
+#### Q3.6. Given this additional assumption check, which test will you use? 
+
+
+
+#### Q3.7. Run the test
+
+```{r}
+
+```
+
+#### Q3.8. Conclude on your null hypothesis
+
+
+
+#### Q3.9. Conduct any post-hoc testing necessary. Which group(s) seem to be different?
+
+```{r}
+
+```
+
