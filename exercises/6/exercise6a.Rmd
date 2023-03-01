@@ -1,0 +1,163 @@
+---
+title: "Exercise 6b: ANOVA"
+author: "Your-name-here"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(palmerpenguins)
+library(car)
+```
+
+## Example 1: Comparing bill length across species of penguins
+
+We would like to know if the mean bill length varies between species of penguins included in the `palmerpenguins` dataset. We know the dataset pretty well at this point, so let's go ahead and load it:
+
+```{r}
+penguins <- penguins
+
+```
+
+
+#### Q1.1. Start by visualizing the distribution of bill length across the groups using a boxplot. Remember to think about what your continuous variable is and what your grouping variable is.
+
+```{r}
+ggplot(data = ---, aes(x = ---, y = ---))+
+  geom_boxplot()
+
+```
+
+#### Q1.2. From the boxplots above, do you think it's likely that the groups differ in mean bill length? And if so, which group(s) do you think are different?
+
+
+#### Q1.3. Given the number of groups and the type of variable you'd like to compare across them, which type of test should you use? 
+
+
+
+### Q1.4. Let's start off by stating our null and alternate hypothesis.
+
+H~0~: 
+H~1~:  
+
+
+#### Q1.5. What are the assumptions for this test? 
+
+
+
+
+#### Q1.6. Test the normality assumption
+
+```{r}
+qqPlot(---)
+
+shapiro.test(---)
+```
+
+#### Q1.7. Test the homogeneity of variance assumption
+
+```{r}
+leveneTest(--- ~ ---,  data = ---)
+```
+
+#### Q1.8. You've now got an example where a single individual has thrown off your Shapiro test. Consider that the Gentoo species has met normality. Other than that test, have the assumptions for the ANOVA analysis been met? 
+
+
+
+#### Q1.9. Perform the ANOVA analysis
+
+```{r}
+anova1 <- aov(--- ~ ---,  data = ---)
+summary(anova1)
+```
+
+#### Q1.10. Consider the results from your ANOVA test. What do you conclude about your null hypothesis?
+
+
+
+#### Q1.11. Perform your post-hoc test. Between which groups does there seem to be a difference?
+
+```{r}
+TukeyHSD(---)
+
+```
+
+## Example 2: Displacement in engines with different numbers of gears
+
+We're interested in knowing whether engines with different gears have different displacement - that is, the volume moved by an engine. The data is contained in the `mtcars` data which is loaded with `dplyr`
+
+
+```{r}
+mtcars <- mtcars
+
+mtcars <- mtcars %>% 
+  mutate(gear = as.factor(gear))
+
+```
+
+
+#### Q2.1. Start by visualizing the distribution of `disp` across the groups using a boxplot. Remember to think about what your continuous variable is and what your grouping variable is.
+
+```{r}
+ggplot(data = ---, aes(x = ---, y = ---))+
+  geom_boxplot()
+
+```
+
+#### Q2.2. From the boxplots above, do you think it's likely that the groups differ in displacement? And if so, which group(s) do you think are different?
+
+
+
+#### Q2.3. Given the number of groups and the type of variable you'd like to compare across them, which type of test should you use? 
+
+
+
+### Q2.4. Let's start off by stating our null and alternate hypothesis.
+
+H~0~: 
+H~1~: 
+
+
+#### Q2.5. What are the assumptions for this test? 
+
+
+
+
+#### Q2.6. Test the normality assumption
+
+```{r}
+qqPlot(---)
+
+shapiro.test(---)
+```
+
+
+#### Q2.7. Test the homogeneity of variance assumption
+
+```{r}
+leveneTest(--- ~ ---,  data = ---)
+```
+
+#### Q2.8. You've now got an example where the p-value for normality is marginal. Consider that the 4-gear group has met normality. Other than that test, have the assumptions for the ANOVA analysis been met? 
+
+
+
+#### Q1.9. Perform the ANOVA analysis
+
+```{r}
+anova2 <- aov(--- ~ ---,  data = ---)
+summary(anova2)
+```
+
+#### Q1.10. Consider the results from your ANOVA test. What do you conclude about your null hypothesis?
+
+
+#### Q1.11. Perform your post-hoc test. Between which groups does there seem to be a difference?
+
+
+
+```{r}
+TukeyHSD(---)
+```

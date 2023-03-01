@@ -1,0 +1,104 @@
+---
+title: "The Chi Square test"
+author: "Your-name-here"
+date: '`r Sys.Date()`'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(palmerpenguins)
+library(evoarchdata)
+```
+
+## Problem 1: Distribution of household tasks 
+
+We have surveyed 1744 couples to learn about who manages certain tasks in the household. The couples were asked about a specific task, and they could answer that in their household, the task is typically done by the wife, typically done by the husband, typically done jointly, or that it was done sometimes by the wife and sometimes by the husband (alternating). 
+
+The data is available online -- I've written the code here for you:
+
+```{r}
+file_path <- "http://www.sthda.com/sthda/RDoc/data/housetasks.txt"
+housetasks <- read.delim(file_path, row.names = 1)
+```
+
+#### Q1.1. Visualize the structure or the first few rows of the data frame. Does this look to be a raw dataset, or a frequency table? 
+
+ 
+
+```{r}
+
+```
+
+#### Q1.2. We are interested in whether the attribution of tasks to a person varies across the various housetasks. We can use a Chi square test for this. What is the null and alternate hypothesis?
+
+H0: 
+H1: 
+
+#### Q1.3. Run the Chi squared test, and save the object as chi1
+
+```{r}
+chi1 <- chisq.test(---) 
+chi1
+```
+
+#### Q1.5. What are the assumptions of the Chi squared test?
+
+
+#### Q1.6. Check the assumption that none of the expected counts should be less than 5:
+
+```{r}
+chi1$---
+```
+
+#### Q1.7. Given your test results and your assumption check, conclude on your null hypothesis:
+
+
+
+## Example 2: Decoration of ceramics over time 
+
+An archaeological example now. We are exploring decoration of ceramics found over time at a group of settlement in the Merzbach area of western Germany. These were made about 5000 years ago by one of the first farming groups in the area, and were recovered when a modern mine was put in. 
+
+We are interested in knowing whether certain motifs in the decorative style were more or less common across time periods.
+
+The data are contained in the `ceramics_lbk_merzbach` dataset inside the `evoarchdata` package. I'll load it here for you:
+
+```{r}
+ceramics <- ceramics_lbk_merzbach
+ceramics <- ceramics %>% select(Phase, BT13, BT3, BT24, BT5, BT2, BT12, BT8)
+ceramics <- data.frame(ceramics, row.names = 1)
+```
+
+
+#### Q2.1. Visualize the structure or the first few rows of the data frame. Does this look to be a raw dataset, or a frequency table? 
+
+ 
+
+```{r}
+
+```
+
+#### Q2.2. What is the null and alternate hypothesis?
+
+H0: 
+H1: 
+#### Q2.3. Run the Chi squared test, and save the object as `chi2`
+
+```{r}
+
+
+```
+
+#### Q2.5. What are the assumptions of the Chi squared test?
+
+
+#### Q2.6. Check the assumption that none of the expected counts should be less than 5:
+
+```{r}
+
+```
+
+#### Q1.7. Given your test results and your assumption check, conclude on your null hypothesis:
+
+
