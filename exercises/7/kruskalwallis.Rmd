@@ -1,0 +1,70 @@
+---
+title: "Kruskal Wallis"
+author: "Your-name-here"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(car)
+library(FSA)
+
+child <- read.csv("wellbeing-scores.csv")
+
+```
+
+
+## 1. Child wellbeing scores 
+
+We are working in a hospital unit and have been posted in a pediatric unit. Every few hours, a nurse is asked to assess the condition of patients in the unit. Condition is  scored on an ordinal Likert scale: 5 codes for very good, 3 for neither good nor bad, and 1 for very bad. We have three patients which have been assessed 10 times each. Their scores are contained in the `child` dataset. We want to know, do their scores differ? 
+
+
+#### Q1.1. Start by making a plot of the data, showing differences in the distribution of scores between the two patients. 
+
+Note: There are multiple ways to do this! 
+
+```{r }
+
+
+```
+
+#### Q1.3. Assess normality of scores for each patient. Should we use a parametric or non-parametric test?
+
+```{r}
+
+
+```
+
+#### Q1.3. Which type of non-parametric test should we use?
+
+
+
+#### Q1.4. State the null and alternate hypotheses
+
+H~0~: 
+
+H~1~: 
+
+
+#### Q1.5. Run the test 
+
+```{r}
+
+```
+
+#### Q1.6. Conclude on your null hypothesis:
+
+```{r}
+
+
+```
+
+#### Q1.7. Which group(s) differ from the others and in what direction? You might use here the Dunn test as well as your initial plot to help you interpret the Dunn test
+
+
+
+
+
