@@ -177,8 +177,11 @@ guns %>%
 
 #### Q2.10. Calculate the test using the appropriate version of the test.
 
+If one tailed, needs the alternative = "greater" argument
 ```{r}
 t.test(violent ~ law, data = guns, var.equal = TRUE)
+t.test(violent ~ law, data = guns, var.equal = TRUE, alternative = "greater")
+
 
 ```
 
