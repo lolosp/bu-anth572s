@@ -1,0 +1,217 @@
+---
+title: "Assignment 2"
+author: "Your-name-here"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(car)
+```
+
+*Total points possible: *
+
+## Problem 1. Final grades in bioanth *(10pts total)*
+
+Our department's Introduction to Biological Anthropology class, taught for years by Dr Zeppo, is popular with students across the university. Over many semesters of teaching the course, the average final grade has been 67.5. Lately, more students from the biology department have been taking this class. Since these students likely have more background in biology and evolution than most students studying social science, we want to know: do biology students do better in the course than other students? Final grades for these students are given in the `grades` vector below.
+
+
+```{r cars}
+grades <- c(50, 60, 60, 64, 66, 66, 67, 69, 70, 74, 76, 76, 77, 79, 79, 79, 81, 82,82, 89)
+
+```
+
+#### Q1.1. Do you have one or two samples? What is your sample size? What kind of test should you use? *(2 pts, 0.5 for the first two and 1 for the last Q)*
+
+One sample. Sample size is 20. You should use a one tailed t-test.
+
+```{r}
+n <- length(grades)
+n
+```
+
+#### Q1.2. State your null and alternate hypotheses
+*(1pt)*
+
+H~0~: The mean score is 67.5
+H~1~: The mean score is greater than 67.5
+
+
+#### Q1.3. Is this a one or two tailed test?
+*(1pt)*
+
+One tailed
+
+#### Q1.4. Calculate your critical test values. Use an $\alpha$ level of 0.05
+*(1pt)*
+
+Critical value is ~1.73
+
+```{r}
+
+crit <- qt(0.95, df = n -1 )
+
+```
+
+
+#### Q1.5. Plot your critical region by modifying the plotting code given below.
+*(1pt)*
+
+```{r}
+
+ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
+  stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1))+
+  geom_area(stat = 'function', fun = dnorm, args = list(mean = 0, sd = 1), fill = "red", alpha = 0.4, xlim = c(crit, 4))+ # modify the xlim argument 
+  scale_x_continuous(breaks = seq(-4,4,1))+ labs(x = "", y = "proportion")+
+  theme_minimal()+
+  ggtitle("Red = region for rejection of null")
+
+```
+
+#### Q1.6. Calculate the sample mean and standard deviation for your biology students
+*(1pt)*
+
+```{r}
+mean <- mean(grades)
+sd <- sd(grades)
+
+mean
+sd
+```
+
+#### Q1.7. Calculate the test statistic
+*(1pt)*
+
+```{r}
+t <- (mean - 67.5)/(sd/sqrt(n))
+t
+```
+
+
+#### Q1.8. Plot the test statistic against your critical region by copy and pasting the plot you previously made. Then, add a vertical line representing your test statistic.
+*(1pt)*
+
+```{r}
+
+ggplot(data = data.frame(x = c(-4, 4)), aes(x)) +
+  stat_function(fun = dnorm, n = 101, args = list(mean = 0, sd = 1))+
+  geom_area(stat = 'function', fun = dnorm, args = list(mean = 0, sd = 1), fill = "red", alpha = 0.4, xlim = c(crit, 4))+ # modify the xlim argument 
+  geom_vline(xintercept = t, lty = "dashed")+
+  scale_x_continuous(breaks = seq(-4,4,1))+ labs(x = "", y = "proportion")+
+  theme_minimal()+
+  ggtitle("Red = region for rejection of null")
+
+```
+
+#### Q1.9. State your conclusions on the null hypothesis:
+*(1pt)*
+
+We reject the null hypothesis.
+
+
+## Problem 2. Guns laws and violent crime rates in the US *(14pts)*
+
+The data stored in the `violent_crime_1999.csv` file contains information on violent crime rate (incidents per 100,000 people), murder rate, robery rate, incarceration rate, and some demographic information for each of the 50 US states. The observations were made in 1999, and they also include the variable `law`, which is coded `yes` if the state had a shall-issue law in effect that year, and `no` if it did not. Shall-issue laws are laws that give residents of a state the right to carry guns - essentially, these force the state to give residents access to permits as long as the applicant meets the basic requirements set out by the law.
+
+Some people argue that shall-issue laws reduce crime because residents can access guns to protect themselves. We are interested in testing whether this is true, using violent crime rates given in `guns$violent`.
+
+#### Q2.1. Read in the data, and save it as a dataframe called `guns`. Then print the first few rows in order to get a sense for the data
+*(1pt)*
+
+```{r}
+guns <- read.csv("violent_crime_1999.csv")
+head(guns)
+```
+
+#### Q2.2. Do you have one or two samples? What is your sample size for each sample? What kind of test should you use?
+*(3pts)*
+
+Two samples. 21 states without a law, 29 states with a law. Two sample t-test 
+
+```{r}
+guns %>% 
+  group_by(law)%>%
+  count()
+```
+
+#### Q2.3. State your null and alternate hypotheses
+*(1pt)*
+
+H~0~: There is no difference in the mean violent crime rate between states with and without a shall issue law
+H~1~: There is a difference in the mean violent crime rate between states with and without a shall issue law
+
+#### Q2.4. Is this a one or two tailed test?
+*(1pt)*
+
+Two tailed -- would accept one tailed, but then the test should be run accordingly
+
+#### Q2.5. State the three assumptions for this test, and explain whether or not the independence of observations assumption is met.
+*(2pts)*
+
+1. Independence of observations
+2. Normality of your variables
+3. Equality of variance
+
+The independence of observation is met because each observation is for a different state.
+
+
+#### Q2.6. Test the assumption of normality. Does your data meet the assumption?
+*(1pt)*
+Yes
+
+```{r}
+guns.no <- filter(guns, law == "no")
+guns.ys <- filter(guns, law == "yes")
+
+shapiro.test(guns.no$violent)
+shapiro.test(guns.ys$violent)
+```
+
+#### Q2.7. Test the assumption of equal variance. Does your data pass this test?
+*(1pt)*
+Yes
+
+```{r}
+leveneTest(violent ~ law, data = guns)
+```
+#### Q2.8. Given the results of your assumptions testing, which version of the test should you use and why?
+*(1pt)*
+
+Student t-test because the samples have equal variance -- Will accept Welch's test with the argument that it doesnt reduce power much.
+
+
+#### Q2.9. Calculate the mean violent crime rate for both the states with a shall issue law and those without
+*(1pt)*
+
+```{r}
+guns %>% 
+  group_by(law)%>%
+  summarize(mean = mean(violent))
+```
+
+
+#### Q2.10. Calculate the test using the appropriate version of the test.
+*(1pt)* 
+
+If one tailed, needs the alternative = "greater" argument
+```{r}
+t.test(violent ~ law, data = guns, var.equal = TRUE)
+t.test(violent ~ law, data = guns, var.equal = TRUE, alternative = "greater")
+
+
+```
+
+#### Q2.11. State your conclusions on the null hypothesis:
+*(1pt)*
+
+We fail to reject the null hypothesis.
+
+
+
+
+## Attributions
+
+- Problem 1 is adapted from Danielle Navarro's [Learning Statistics with R](https://learningstatisticswithr.com/lsr-0.6.pdf)
+- Problem 2 uses data adapted from the `AER` package, which originally comes from the Ayres and Donohue paper [Shooting down the more guns, less crime hypothesis](https://www.nber.org/system/files/working_papers/w9336/w9336.pdf)
