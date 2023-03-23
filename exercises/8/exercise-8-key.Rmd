@@ -1,0 +1,251 @@
+---
+title: "Exercise 8"
+author: "Your-name-here"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(car)
+library(palmerpenguins)
+```
+
+Problem 1. Age at marriage and divorce
+
+We have a dataset detailing median age at marriage, and divorce rates for each of the 50 states in the US (yes, this is the Waffle House data set). We want to know what the relationship between median age at marriage is. 
+
+Start by loading the data and looking at the first few rows:
+
+```{r}
+waffle <- read.csv("waffle-abbreviated.csv")
+head(waffle)
+```
+
+#### Q1.1. What is the unit of observation for the `waffle` data frame?
+
+Each state
+
+#### Q1.2. Produce a plot showing the relationship between age at marriage and divorce rates. Consider which of your variables should be on the x and the y axis. Make sure to add a linear line to show the relationship between the variables
+
+```{r}
+ggplot(waffle, aes(x = med.age.marriage, y = divorce))+
+  geom_point()+
+  geom_smooth(method = "lm")
+
+```
+
+#### Q1.3. From the plot, what do you think the relationship is between median age at marriage and divorce rate? As age at marriage increases, what happens to divorce? 
+
+Inverse - as median aget at marriage increases, divorce rates decrease
+
+
+#### Q1.4. From the plot, would you classify the relationship as weak, moderate or strong?
+
+Moderate - there is clearly a relationship but there is plenty of spread around the line of best fit
+
+
+#### Q1.5. What are the assumptions of the Pearson's correlation coefficient? 
+
+1. Related pairs of observations
+2. Normality of the variables
+3. No outliers
+4. Linear relationship between the variables
+
+
+
+#### Q1.6. Check the normality of your variables
+
+Looks good 
+
+```{r}
+qqPlot(waffle$med.age.marriage)
+qqPlot(waffle$divorce)
+
+```
+
+
+#### Q1.7. Calculate the correlation coefficient between age at marriage and divorce rate:
+
+```{r}
+cor(waffle$med.age.marriage, waffle$divorce)
+
+```
+
+#### Q1.8. Do the results of the correlation analysis agree with your initial visual estimate of the relationship? Why or why not?
+
+Yes, this corresponds to a medium strenght inverse correlation
+
+
+#### Q1.9. Conduct a formal test for the correlation coefficient. Is the correlation statistically significant? 
+
+Yes, the correlation is statistically significant
+
+```{r}
+cor.test(waffle$med.age.marriage, waffle$divorce)
+
+```
+
+
+## Problem 2: Predicting flipper length from body mass
+
+Let's return to the penguins dataset. We want to know what the relationship between body mass and flipper length is. Our ultimate hope is to be able to measure flipper length in order to be able to predict body mass for new penguins.
+
+Start by loading the data and looking at the first few rows:
+
+```{r}
+penguins <- penguins
+head(penguins)
+```
+
+#### Q2.1. Start by making a plot showing the relationship between flipper length and body mass. Consider which of your variables should be on the x and the y axis. Make sure to add a linear line to show the relationship between the variables
+
+```{r}
+ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g))+
+  geom_point()+
+  geom_smooth(method = "lm", se = F)
+
+```
+
+#### Q2.2. Based on the plot, what kind of relationship is there between flipper length and body mass? Include both direction and strength. 
+
+Positive, medium-strong correlation
+
+
+#### Q2.3. What are the assumptions of linear regression? 
+
+1. Independence of observations
+2. Linear relationship between X and Y
+3. Normality of residuals 
+4. Homoscedasticity 
+
+#### Q2.4. Does your data meet the independence assumption?
+
+Yes because each observation is an individual, non-duplicated penguin
+
+
+#### Q2.5. Use the plot you've created to answer the following questions. Does your data meet the linear relationship assumption? Does your data meet the homoscedasticity assumption?
+
+Yes, the relationship between the variables is roughly linear 
+Yes, the spread of the residuals is similar at all values of x.
+
+#### Q2.6. Build your linear model, and save it as `reg1`
+
+```{r}
+reg1 <- lm(body_mass_g ~ flipper_length_mm, data = penguins)
+```
+
+
+#### Q2.7. Print the regression model output with `summary()`. Interpret the coefficient for flipper
+
+ 
+
+```{r}
+summary(reg1)
+
+```
+
+#### Q2.8. Check your last remaining assumption - that the residuals are distributed normally
+
+Yes, the residuals are approximately normally distributed 
+
+```{r}
+qqPlot(reg1)
+```
+
+#### Q2.9. Imagine we have measured two new penguin. Their flipper lengths are 190mm and 213mm. Use your regression to estimate their body weights. 
+Note: There are multiple ways to do this! 
+
+```{r}
+newdata <- data.frame(flipper_length_mm = c(190, 213))
+
+predict(reg1, newdata)
+
+```
+
+
+## Problem 3: Updating our regression models
+
+Let's return to the regression model we built before. We suspect that body mass may vary between male and female penguins, and that adding an additional term in our regression may improve our models.
+
+
+#### Q3.1. Produce summary statistics and a data visualization to compare body mass between male and female penguins
+
+```{r}
+penguins %>% 
+  group_by(sex)%>%
+  summarize(mean = mean(body_mass_g, na.rm = TRUE), 
+            sd = sd(body_mass_g, na.rm = TRUE))
+
+penguins%>%
+  filter(!is.na(sex))%>%
+  ggplot(aes(x = body_mass_g))+
+  geom_histogram(binwidth = 10)+
+  facet_grid(sex~.)
+
+```
+
+#### Q3.2. Produce summary statistics and a data visualization to compare flipper length between male and female penguins
+
+```{r}
+penguins %>% 
+  group_by(sex)%>%
+  summarize(mean = mean(flipper_length_mm, na.rm = TRUE), 
+            sd = sd(flipper_length_mm, na.rm = TRUE))
+penguins%>%
+  filter(!is.na(sex))%>%
+  ggplot( aes(x = flipper_length_mm))+
+  geom_histogram(binwidth = 10)+
+  facet_grid(sex~.)
+
+
+```
+
+#### Q3.3. Produce a visualization that shows the relationship between body mass and flipper length in male versus female penguins. Based on this visualization, do you think there is a difference in the relationship between these variables across the sexes? 
+
+```{r}
+ggplot(penguins, aes(x = flipper_length_mm, y = body_mass_g, col = sex))+
+  geom_point()+
+  geom_smooth(method = "lm", se = FALSE)
+
+penguins %>% 
+  filter(!is.na(sex))%>%
+ggplot( aes(x = flipper_length_mm, y = body_mass_g, col = sex))+
+  geom_point()+
+  geom_smooth(method = "lm", se = FALSE)
+
+```
+
+
+#### Q3.4. Build a linear model, adding a term for sex of the penguin, and save the regression as `reg2`
+
+```{r}
+reg2 <- lm(body_mass_g ~ flipper_length_mm + sex, data = penguins)
+```
+
+
+#### Q2.7. Print the regression model output with `summary()`. Interpret the coefficients for flipper length and sex.
+
+```{r}
+summary(reg2)
+
+```
+
+
+#### Q2.9. Imagine we have measured four new penguin. Two penguins have flipper lengths of 190mm, and in that group there is one male and one female. Two other penguins have flipper lengths of 213mm, and in that group there is one male and one female. Use your new regression to estimate their body weights. 
+
+Note: There are multiple ways to do this! 
+
+```{r}
+
+newdata <- data.frame(
+  flipper_length_mm = c(190, 213, 190, 213), 
+  sex = c("female", "female", "male", "male"))
+
+predict(reg2, newdata, interval = "predict")
+
+
+```
+
+

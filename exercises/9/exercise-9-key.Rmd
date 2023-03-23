@@ -1,0 +1,161 @@
+---
+title: "Odds and Logistic Regression"
+author: "Key"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+
+```
+
+## Problem 1: Odds ratio with a single categorical predictor
+
+We have a dataset that includes observations of patients. For each patient, we have recorded values for a group of risk factors for developing diabetes as well as a variable coding whether or not the patient has indeed developed diabetes. We want to know how some of these risk factors predict the odds of developing diabetes. 
+
+Start by loading the diabetes dataset, which is provided as a `.csv` file and save it as `diabetes`. Visualize the first few rows
+
+```{r}
+diabetes <- read.csv("diabetes.csv")
+head(diabetes)
+```
+
+#### Q1.1. Blood glucose concentration of 130 and higher on random sampling have been documented to predict development of diabetes. Let's test this. In this dataset, blood glucose is recorded on a continuous scale and stored in the `glucose` dataset. Start by creating a new variable called `gluc.bin` which is coded as `0` if `glucose` is less than 130 and `1` if glucose is 130 or higher.
+Note: Make sure to save the dataset so that you can use this variable later!
+
+```{r}
+diabetes <- diabetes %>% 
+  mutate(gluc.bin = ifelse(glucose <130, 0, 1))
+
+```
+
+#### Q1.2. Create a visualization that depicts the distribution of diabetes cases by your new glucose threshold variable. 
+Note: there are multiple ways to do this
+
+```{r}
+ggplot(diabetes, aes(x = factor(outcome), fill = factor(gluc.bin)))+
+  geom_bar(position = "fill")
+
+ggplot(diabetes, aes(x = factor(gluc.bin), fill = factor(outcome)))+
+  geom_bar(position = "stack")
+
+ggplot(diabetes, aes(x = factor(gluc.bin), fill = factor(outcome)))+
+  geom_bar(position = "dodge")
+```
+
+#### Q1.3. Create a frequency table that tabulates the number of people who have or don't develop diabetes by the number of people who have or don't have elevated blood glucose
+
+```{r}
+tab1 <- table(diabetes$diabetes, diabetes$gluc.bin)
+table(diabetes$outcome, diabetes$gluc.bin)
+
+```
+
+#### Q1.4. Use the table you just created to calculate the odds ratio for developing diabetes given elevated blood glucose levels
+
+```{r}
+OR <- (84*211)/(46*51)
+OR
+```
+
+### Q1.5. Interpret the odds ratio you created
+
+The odds of developing diabetes for individuals with elevated blood glucose are 7.55 times those for individuals without elevated blood glucose levels, or a 655% increase in the odds. 
+
+#### Q1.6. Fit a logistic regression model using elevated blood glucose. Save this as `fit1`. Obtain the odds ratio. How does this odds ratio compare to the OR you calculated manually?
+Hint: Make sure you are on the correct scale!
+
+The OR obtained manually is the same as the OR obtained with logistic regression
+
+```{r}
+fit1 <- glm(outcome ~ factor(gluc.bin), family = binomial, data = diabetes)
+exp(fit1$coefficients)
+```
+
+# Problem 2: Odds ratio with a single continuous variable
+
+Let's use the same dataset. Remember that when we created `gluc.bin`, we recoded a continuous variable to a binary one because we need a categorical variable to manually calculate an odds ratio. However, when we bin a variable, we lose some of the detail available to us.
+
+
+#### Q2.1. Build a logistic regression model using `glucose`, the continuous measure of blood glucose, to predict the onset of diabetes, and save this as `fit2`. Print the summary. Is `glucose` significantly associated with the outcome?  
+
+```{r}
+
+fit2 <- glm(outcome ~ glucose, family = binomial, data = diabetes)
+summary(fit2)
+
+
+```
+
+#### Q2.2. Interpret the coefficient for your main predictor 
+Note: pay attention to the scale your coefficient is on!
+
+For every increase of 1 unit in blood glucose, there is a 0.04 times increase in the log odds of developing diabetes.
+
+Or,
+
+For every increase of 1 unit in blood glucose, the odds of developing diabetes are 1.04 times the odds at baseline
+
+
+#### Q2.3. Print the OR and its confidence interval from `fit1`, as well as the OR and the confidence interval from `fit2`. Are they similar or different? Explain why they might be different.
+
+They are different because every unit increase in blood glucose is so much smaller than a dichomotized difference between elevated and not elevated blood glucose. 
+
+```{r}
+exp(cbind(coef(fit1), confint(fit1)))
+exp(cbind(coef(fit2), confint(fit2)))
+```
+
+#### Q2.4. Predict the probability that someone with a blood glucose of 132 will develop diabetes
+
+```{r}
+predict(fit2, newdata = data.frame(glucose = 132), type = "response")
+
+```
+
+# Problem 3: Odds ratios with multiple predictors
+
+Let's use the same dataset once more. Remember that one of the drawbacks of manually calculating odds ratios is that we can't account for multiple variables. Let's now work on building models with multiple predictors. 
+
+
+#### Q3.1. Build a logistic regression model that predicts developing diabetes as a function of blood pressure (continuous) and insulin levels, and save it as `fit3`
+
+```{r}
+
+fit3 <- glm(outcome ~ pressure + insulin, family = binomial, data = diabetes)
+summary(fit3)
+```
+
+#### Q3.2. Interpret the coefficients for blood pressure and insulin.
+
+Holding insulin constant, an increase of 1 unit in blood pressure is associated with `r exp(0.032)` times the odds of developing diabetes relative to baseline
+
+Holding blood pressure constant, an increase of 1 unit in insulin level is associated with `r exp(0.005)` times the odds of developing diabetes relative to baseline
+
+
+#### Q3.3. Are the predictors significantly associated with the outcome?
+
+Yes p <0.05 for both coefficients
+
+
+#### Q3.4. Now add blood glucose back into the model, and save the model as `fit4`. 
+
+```{r}
+fit4 <- glm(outcome ~ pressure + insulin + glucose, family = binomial, data = diabetes)
+summary(fit4)
+```
+
+
+#### Q3.5. Print the summary of model `fit4`. Are the predictors signficantly associated with the outcome?
+
+No, now only blood glucose is. 
+
+```{r}
+summary(fit4)
+```
+
+#### Q3.6. Compare `fit3` and `fit4`. Why have the coefficients for blood pressure and insulin changed? What does that tell you about the relative predictive power of blood glucose relative to your other predictors? 
+
+pressure and insulin have become non-significant. Once you control for blood glucose, insulin and blood pressure are not associated with the outcome.

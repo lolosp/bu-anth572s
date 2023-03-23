@@ -1,0 +1,91 @@
+---
+title: "PCA and Factor Analysis"
+author: "Your-name-here"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(factoextra)
+library(FactoMineR)
+library(archdata)
+library(corrplot)
+library(ggpubr)
+```
+
+## Problem 1: Provenancing glass artifacts
+
+We have a set of 48 ceramic artifacts which we have put through XRF (or whatever) and for which we now know the chemical composition. These come from five different Romano-British sites. We know that different pottery producers at the time drew their materials from local soil. Therefore, chemical composition of these artifacts reflects where they were from. 
+
+We want to run a PCA analysis that summarizes the variation in chemical composition across these items, with the goal of identifying clusters in the data that might reflect the items' provenance. 
+
+The data live in the `archdata` package under the name `RBPottery`
+
+Start by loading the data, and taking a look at the first few rows. What is the unit of observation for the dataset?
+
+```{r}
+data("RBPottery")
+pottery <- RBPottery
+
+```
+
+#### Q1.1. What are the variables you may want to include in your PCA? Which variables will you want to exclude?
+
+
+
+#### Q1.2. Produce a correlation matrix and correlation plot to visualize how your variables relate to each other. Which variables seem to be negatively correlated to others?
+
+```{r}
+cor <- cor(pottery[,4:12])
+corrplot(cor, method = "ellipse", type = "lower")
+```
+
+#### Q1.3. Run a PCA analysis with the `FactoMineR` package. make sure to use only the variables that make sense in a PCA. Set `graph = TRUE` (or omit the argument). How many clusters do there appear to be in the dataset? 
+
+```{r}
+pot.pca <- PCA(RBPottery, quali.sup = 1:3)
+
+```
+
+
+#### Q1.4. Use `factoextra` to produce a graph of the importance of the correlation of the variables with the PCs. Color the variables by `contrib`, or their contribution to the model. 
+
+```{r}
+fviz_pca_var(pot.pca, col.var="contrib")
+```
+
+#### Q1.5. Use your contribution plot above to answer the following question: In which quadrant would a piece of pottery with high levels of Al2O3 and high levels of TiO2 fall? Would they have low or high values on PCs 1 and 2?
+
+
+
+#### Q1.6. Retrieve the eigenvalues of the PCs in the model. How many PCs do you think suffice to summarize the data? How much of the total variance do they explain? How much of the variance is explained by the first PC alone?
+
+```{r}
+pot.pca$eig
+```
+
+#### Q1.7. Explore your suspicions with a scree plot. Does the screeplot produce the same results as your eigenvalue cut-off?
+
+```{r}
+fa.parallel(pottery[,4:12])
+```
+
+#### Q1.8. Produce a visualization that super imposes groupings onto the PC plot. You can do this either with `factoextra` or by extracting the scores and plotting them yourself. Make two plots: one for grouping of `Kiln` and one for grouping `Region`. Do these groupings agree with your initial thoughts on the groupings in question 1.3?
+
+```{r}
+ind <- get_pca_ind(pot.pca)
+pottery$dim1 <- ind$coord[,1]
+pottery$dim2 <- ind$coord[,2]
+
+ggplot(pottery, aes(x = dim1, y = dim2, col=Kiln, fill = Kiln))+
+  geom_point()+
+  stat_chull(geom = "polygon", alpha = 0.2)
+
+ggplot(pottery, aes(x = dim1, y = dim2, col=Region, fill = Region))+
+  geom_point()+
+  stat_chull(geom = "polygon", alpha = 0.2)
+
+```
+

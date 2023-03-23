@@ -1,0 +1,137 @@
+---
+title: "Odds and Logistic Regression"
+author: "Your-name-here"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+
+```
+
+## Problem 1: Odds ratio with a single categorical predictor
+
+We have a dataset that includes observations of patients. For each patient, we have recorded values for a group of risk factors for developing diabetes as well as a variable coding whether or not the patient has indeed developed diabetes. We want to know how some of these risk factors predict the odds of developing diabetes. 
+
+Start by loading the diabetes dataset, which is provided as a `.csv` file and save it as `diabetes`. Visualize the first few rows
+
+```{r}
+
+
+```
+
+#### Q1.1. Blood glucose concentration of 130 and higher on random sampling have been documented to predict development of diabetes. Let's test this. In this dataset, blood glucose is recorded on a continuous scale and stored in the `glucose` dataset. Start by creating a new variable called `gluc.bin` which is coded as `0` if `glucose` is less than 130 and `1` if glucose is 130 or higher.
+Note: Make sure to save the dataset so that you can use this variable later!
+
+```{r}
+
+
+```
+
+#### Q1.2. Create a visualization that depicts the distribution of diabetes cases by your new glucose threshold variable. 
+Note: there are multiple ways to do this
+
+```{r}
+
+```
+
+#### Q1.3. Create a frequency table that tabulates the number of people who have or don't develop diabetes by the number of people who have or don't have elevated blood glucose
+
+```{r}
+
+
+```
+
+#### Q1.4. Use the table you just created to calculate the odds ratio for developing diabetes given elevated blood glucose levels
+
+```{r}
+
+```
+
+### Q1.5. Interpret the odds ratio you created
+
+ 
+
+#### Q1.6. Fit a logistic regression model using elevated blood glucose. Save this as `fit1`. Obtain the odds ratio. How does this odds ratio compare to the OR you calculated manually?
+Hint: Make sure you are on the correct scale!
+
+
+```{r}
+
+```
+
+# Problem 2: Odds ratio with a single continuous variable
+
+Let's use the same dataset. Remember that when we created `gluc.bin`, we recoded a continuous variable to a binary one because we need a categorical variable to manually calculate an odds ratio. However, when we bin a variable, we lose some of the detail available to us.
+
+
+#### Q2.1. Build a logistic regression model using `glucose`, the continuous measure of blood glucose, to predict the onset of diabetes, and save this as `fit2`. Print the summary. Is `glucose` significantly associated with the outcome?  
+
+```{r}
+
+
+
+
+```
+
+#### Q2.2. Interpret the coefficient for your main predictor 
+Note: pay attention to the scale your coefficient is on!
+
+
+
+#### Q2.3. Print the OR and its confidence interval from `fit1`, as well as the OR and the confidence interval from `fit2`. Are they similar or different? Explain why they might be different.
+
+
+```{r}
+
+
+```
+
+#### Q2.4. Predict the probability that someone with a blood glucose of 132 will develop diabetes
+
+```{r}
+
+```
+
+# Problem 3: Odds ratios with multiple predictors
+
+Let's use the same dataset once more. Remember that one of the drawbacks of manually calculating odds ratios is that we can't account for multiple variables. Let's now work on building models with multiple predictors. 
+
+
+#### Q3.1. Build a logistic regression model that predicts developing diabetes as a function of blood pressure (continuous) and insulin levels, and save it as `fit3`
+
+```{r}
+
+
+```
+
+#### Q3.2. Interpret the coefficients for blood pressure and insulin.
+
+
+
+
+#### Q3.3. Are the predictors significantly associated with the outcome?
+
+
+
+#### Q3.4. Now add blood glucose back into the model, and save the model as `fit4`. 
+
+```{r}
+
+```
+
+
+#### Q3.5. Print the summary of model `fit4`. Are the predictors signficantly associated with the outcome?
+
+
+
+```{r}
+
+```
+
+#### Q3.6. Compare `fit3` and `fit4`. Why have the coefficients for blood pressure and insulin changed? What does that tell you about the relative predictive power of blood glucose relative to your other predictors? 
+
+
+
