@@ -1,0 +1,144 @@
+---
+title: "Odds and Logistic Regression"
+author: "Your-name-here"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(archdata)
+```
+
+## Problem 1 : Predicting whether houses are built inside or outside the inner walls *(10pt)*
+
+Recall the archaeological data from the Snodgrass site which we used earlier in the semester. The Snodgrass site is a Missisipian site in Missouri that was occupied around 1300-1420 AD by an agricultural society that focuses on maize cultivation. The site is fortified, meaning that an outer wall encloses the entire site. The site contains 91 pit houses. Some of these are located within a second wall, which provides an additional layer of protection.
+
+Just as we were last time, we are interested in the relationship between size of the house, coded by its `Area`, and whether or not the house is located `Inside` the inner wall or not.
+
+The data is located in the archdata package. Load it and display the first few rows of the dataset
+
+```{r}
+data("Snodgrass")
+head(Snodgrass)
+
+```
+
+#### Q1.1. What is the unit of observation for this dataset? *(1pt)*
+
+Each individual pithouse
+
+
+#### Q1.2. Give descriptive statistics (a measure of centrality and dispersion) for the area of houses inside and outside the inner wall *(2pt)*
+
+```{r}
+
+Snodgrass %>% 
+  group_by(Inside) %>% 
+  summarize(mean_area = mean(Area), 
+            sd_area = sd(Area))
+
+```
+
+#### Q1.3. Create a visualization that compares the distribution of pithouse size by whether or not the pithouse is located within the inner wall *(1pt)*
+
+```{r}
+ggplot(Snodgrass, aes(x = Inside, y = Area))+
+  geom_boxplot()
+
+ggplot(Snodgrass, aes(x = Area))+
+  geom_histogram()+
+  facet_grid(Inside ~. )
+```
+
+#### Q1.4. `Inside` is a variable that is coded as a character vector. Create a new variable in the `Snodgrass` dataset called `Inside_bin` that is coded `0` if the pithouse is outside the walls, and `1` if the pithouse is inside the walls. *(1pt)*
+
+```{r}
+Snodgrass <- Snodgrass %>% 
+  mutate(Inside_bin = ifelse(Inside == "Outside", 0, 1))
+```
+
+#### Q1.5. Using the new variable you have just created, fit a regression model that uses pithouse size to predict whether or not the house is located inside the walls. Save this model as `fit1` *(1pt)*
+
+```{r}
+fit1 <- glm(Inside_bin ~ Area, data = Snodgrass, family = binomial)
+```
+
+#### Q1.6. Print the summary of `fit1`. Is Area associated with whether a house is located inside or outside the walls? Is this a positive or an inverse association?
+*(1pt)*
+
+```{r}
+summary(fit1)
+```
+
+#### Q1.7. Calculate the odds ratio for `Area`, then provide an interpretation of the odds ratio. *(2pt)*
+
+For every increase of 1 unit of Area, the odds of being located inside the walls are 1.035 the odds at baseline.
+
+```{r}
+exp(coef(fit1))
+```
+
+#### Q1.8. Predict the probability of a house with an Area of 350 being located Inside the walls. Look at the summary statistics and visualizations you made earlier. Given those, and that you predicted location for a house with an area of 350, does the probability you predicted make sense? Why or why not?
+*(2pt, 1 for the prediction and 1 for the contextualization of the probability)*
+
+```{r}
+newdata <- data.frame(Area = 350)
+predict(fit1, newdata, type = "response")
+
+```
+
+
+
+Problem 2: Odds of a successful hunt in the Ache *(5pts)*
+
+Let's return to the Ache data set once more. This time, we will work with an abbreviated version of the dataset. This subset only includes one hunt per Ache man, and only includes hunts for which duration of the hunt is not missing.
+
+Read in the dataset, which is contained in the `ache-subset.csv` file.  
+
+```{r}
+ache <- ache_hunting
+str(ache)
+```
+
+#### Q2.1. Fit a logistic regression model that models whether or not a hunt is successful (`success`) as a function of the age of the hunter and the duration of the hunt. Save this as `fit2`
+
+*(1pt)*
+
+```{r}
+fit2 <- glm(success ~ age + hours, data = ache, family = binomial)
+
+```
+
+#### Q2.2. Print the summary for the model. What is the direction of the association between each of the predictors and the outcome? Which of these associations are significant?
+*(2pt)*
+
+Age is positively associated with the outcome. This association is significant
+
+Duration of the hunt is negatively associated with the outcome. This association is not significant.
+
+```{r}
+summary(fit2)
+```
+
+#### Q2.3. Interpret the coefficient for age. *(1pt)*
+
+For every increase of 1 year in age, the odds of the hunt being successful are 1.03 times th
+
+```{r}
+exp(coef(fit2))
+```
+
+#### Q2.4. Predict the probability of the hunt being successful for two hunters, one aged 40 and the other aged 50. Hold the duration of the hunt constant at the median duration from the sample. *(1pt)*
+
+```{r}
+median(ache$hours)
+
+newdata <- data.frame(age = c(30, 40, 50), 
+                      hours = 7.1)
+
+predict(fit2, newdata, type = "response")
+```
+
+
