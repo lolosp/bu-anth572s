@@ -7,6 +7,8 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(car)
 ```
 
 
@@ -24,7 +26,7 @@ wine <- read.csv("winemag-subsetdata.csv")
 *(1pt)*
 
 ```{r}
-ggplot(wine2, aes(x = country, y = price))+
+ggplot(wine, aes(x = country, y = price))+
   geom_boxplot()
 
 ggplot(wine, aes(x = price, fill = country))+
@@ -43,9 +45,9 @@ ggplot(wine, aes(x = price, fill = country))+
 No 
 
 ```{r}
-shapiro.test(wine2$price[wine2$country == "France"])
-shapiro.test(wine2$price[wine2$country == "Italy"])
-shapiro.test(wine2$price[wine2$country == "US"])
+shapiro.test(wine$price[wine$country == "France"])
+shapiro.test(wine$price[wine$country == "Italy"])
+shapiro.test(wine$price[wine$country == "US"])
 ```
 
 
@@ -66,7 +68,7 @@ H~1~: The groups differ in median price
 *(1pt)*
 
 ```{r}
-kruskal.test(price ~ country, data = wine2) 
+kruskal.test(price ~ country, data = wine) 
 
 ```
 

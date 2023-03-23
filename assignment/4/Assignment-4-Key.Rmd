@@ -1,0 +1,194 @@
+---
+title: 'Assignment 4: Linear regression'
+author: "Your-name-here"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(car)
+library(archdata)
+```
+
+## Problem 1: Predicting the price of a diamond. *10pt*
+
+Load the `diamonds-subset.csv` file. This is a subset of the diamonds data that comes pre-loaded with the tidyverse. It contains information about the carat, cut, color, clarity, and sale price of roughly 54,000 diamonds.
+
+You want to predict the price of a diamond based on its size (carat), clarity rating, and cut. 
+
+#### Q1.1. Start by loading the data, assigning it to the name `diamonds`, and taking a look at the first few rows of the dataset *1pt*
+
+```{r}
+diamonds <- read.csv("diamonds-subset.csv")
+head(diamonds)
+str(diamonds) #also accept this
+```
+
+#### Q1.2. Build your regression model according to the prompt, and save it as `reg1` *1pt*
+
+```{r}
+reg1 <- lm(price ~ carat + cut, data = diamonds)
+```
+
+#### Q1.3. What are the baseline/reference categories for your categorical predictors? *1pt*
+
+Cut: Fair
+
+```{r}
+summary(reg1)
+unique(diamonds$cut)
+
+```
+
+#### Q1.4. Interpret the coefficient for carat. *1pt*
+
+
+
+#### Q1.5. Which type of cut is associated with the greatest average increase in price over the baseline? *1pt*
+
+
+
+#### Q1.6. How much of the variation in price appears to be explained by our model? *1pt*
+
+
+
+#### Q1.7. Test the normality of the residuals. Does this appear to meet the normality of residuals assumption? *1pt*
+
+No, there are wide deviations from normality!
+
+```{r}
+qqPlot(reg1)
+
+```
+
+
+#### Q1.8. Plot the data. Set your y axis to the outcome variable, include your main continuous variable on the x axis. Add linear regression lines fit to each of the groups of `cut`.  *1pt*
+
+```{r}
+ggplot(diamonds, aes(x = carat, y = price, col = cut))+
+  geom_point(col = "grey", alpha = 0.3)+geom_smooth(method = "lm", se = FALSE)
+
+```
+
+
+#### Q1.9. Based on the plot you've just produced, what other assumptions does the data seem to violate? *1pt*
+
+1. Linear relationship between the variables
+2. Homoscedasticity
+
+
+#### Q1.10. Given the results of your assumption checking, is linear regression an appropriate type of analysis to model the relationship between price of diamonds and their carat/cut? *1pt*
+
+No
+
+## Problem 2: Dimensions of stone tools *15 pts*
+
+Read in the `DartPoints-subset.csv` file, and assign it to the name `points`. This is a subset of the `DartPoints` dataset which is stored in the `archdata` package. It contains numerical and categorical observations on 78 Archaic dart points recovered during surface surveys at Fort Hood, Texas. 
+
+You want to build a model that predicts the weight of the artifacts from a combination of measurements of length and weight of the artifacts. 
+
+#### Q2.1. Start by reading in the data. Save it as `points`. Then, take a look at it to understand its structure *1pt*
+
+```{r}
+points <- read.csv("DartPoints-subset.csv")
+head(points)
+str(points) # also ok
+```
+
+#### Q2.2. Visualize the relationship between each of the predictors and the outcome. Use two separate plots, paying attention to which variable goes onto which axis, and making sure to fit a linear line to each plot. *1pt*
+
+```{r}
+ggplot(points, aes(x = Width, y = Weight))+geom_point()+geom_smooth(method = "lm")
+
+ggplot(points, aes(x = Length, y = Weight))+geom_point()+geom_smooth(method = "lm")
+
+```
+
+#### Q2.3. Based on the plots, does your data seem to meet the linear relationship and homoscedasiticity assumptions? *1pt*
+
+Yes, linearity is met. Homoscedasticity looks to be mostly met for weight ~ length, but likely is not met for weight ~ width.
+
+#### Q2.4. Fit the regression model as specified in the prompt. Assign the result to the name `reg2` *1pt*
+
+```{r}
+reg2 <- lm(Weight ~ Length + Width, data = points)
+```
+
+#### Q2.5. Does your regression meets the normality of residuals assumption? *1pt*
+
+Yes, or close enough.
+
+```{r}
+qqPlot(reg2$residuals)
+```
+
+#### Q2.6. Interpret the coefficients for Length and Width. *2pt*
+
+Holding all else equal, an increase of 1 unit. in length results in a 0.19 unit increase in weight.
+
+Holding all else equal, an increase of 1 unit in width results in an increase of 0.34 units in weight
+
+```{r}
+summary(reg2)
+```
+
+#### Q2.6. Interpret the meaning of the R-squared for this model *1pt*
+Note: You are looking for the unadjusted value
+
+R-squared = 0.8335. Our model, which accounts for length and width, explains 83.35% of the variation in the outcome, weight.
+
+```{r}
+summary(reg2)
+```
+
+
+#### Q2.7. You now receive five new points. They have the length and width measurements specified in the following vectors called `Length` and `Width`. Use your regression model to predict new values of `Weight` for these 5 artifacts. *1pt*
+
+```{r}
+Length <- c(31, 35, 34, 50, 54)
+Width <- c(15, 18, 20, 26, 28)
+
+new <- data.frame(Length, 
+                  Width)
+
+predict(reg2, newdata = new)
+
+# or, do it manually.
+
+```
+
+#### Q2.8. Now predict estimated weight values for the original data (`points`). Include a 95% prediction interval. Bind the predicted data to the original data, and save the resulting dataframe as `points.fitted` *1pt*
+
+```{r}
+points.fitted <- predict(reg2, newdata = points, interval = "prediction")%>% 
+  cbind(points, .)
+
+```
+
+#### Q2.9. Use `mutate` to create a new column called `correct.est`. Code this new column as follows: it should be coded as `"Correct"` if the true value of `Weight` falls in the 95% prediction interval, and `"Not Correct"` if the true value of `Weight` does not fall in the 95% prediction interval. Make sure to save the new dataframe so. you can use this column. *1pt*
+Hint: use an `ifelse()` statement and two conditional statements!
+
+```{r}
+points.fitted <- points.fitted %>% 
+  mutate(correct.est = ifelse(Weight >= lwr & Weight <= upr, "Correct", "Not correct"))
+
+```
+
+#### Q2.10. Create a plot that shows the relationship between width and weight. Add a smoothed linear line. Add points onto the scatter plot, and color them by your new `correct.est` variable in order to see which original datapoints were correctly/incorrectly estimated by the model. *1pt*
+
+```{r}
+ggplot(points.fitted, aes(x = Width, y = Weight))+
+  geom_point(aes(col = correct.est))+
+  geom_smooth(method = "lm")
+
+```
+
+#### Q2.11. Using the previous plot, answer these questions. How many points were incorrectly estimated by the model? Are they evenly distributed throughout the range of `Width`, one of the predictor variables, and if not, on which part of the values of `Width` are they? What might explain why they are not distributed throughout the range of the values of `Width`? *3pt*
+
+1. 3 points
+2. They are not evenly distributed, they are primarily located on the upper range of the variable. 
+3. Underlying heteroscedasticity - the 95% prediction interval is overestimating spead in the data at lower values of x and potentially underestimating it at higher values of x. 
+
+

@@ -1,0 +1,172 @@
+---
+title: 'Assignment 4: Linear regression'
+author: "Your-name-here"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(car)
+```
+
+## Problem 1: Predicting the price of a diamond. 
+
+Load the `diamonds-subset.csv` file. This is a subset of the diamonds data that comes pre-loaded with the tidyverse. It contains information about the carat, cut, color, clarity, and sale price of roughly 54,000 diamonds.
+
+You want to predict the price of a diamond based on its size (carat), clarity rating, and cut. 
+
+#### Q1.1. Start by loading the data, assigning it to the name `diamonds`, and taking a look at the first few rows of the dataset
+
+```{r}
+diamonds <- ---("diamonds-subset.csv")
+---(diamonds)
+```
+
+#### Q1.2. Build your regression model according to the prompt, and save it as `reg1`
+
+```{r}
+reg1 <- ---
+```
+
+#### Q1.3. What are the baseline/reference categories for your categorical predictors?
+
+
+```{r}
+summary(---)
+
+```
+
+#### Q1.4. Interpret the coefficient for carat.
+
+
+
+#### Q1.5. Which type of cut is associated with the greatest average increase in price over the baseline?
+
+
+
+#### Q1.6. How much of the variation in price appears to be explained by our model?
+
+
+
+#### Q1.7. Test the normality of the residuals. Does this appear to meet the normality of residuals assumption?
+
+
+```{r}
+---()
+```
+
+
+#### Q1.8. Plot the data. Set your y axis to the outcome variable, include your main continuous variable on the x axis. Add linear regression lines fit to each of the groups of `cut`. 
+Note: There are a lot of points in this dataset. Play around with the color and alpha settings of the points layer to be able to clearly see the linear fits.
+
+```{r}
+
+```
+
+
+#### Q1.9. Based on the plot you've just produced, what other assumptions does the data seem to violate?
+
+
+
+
+#### Q1.10. Given the results of your assumption checking, is linear regression an appropriate type of analysis to model the relationship between price of diamonds and their carat/cut?
+
+
+
+## Problem 2: Dimensions of stone tools
+
+Read in the `DartPoints-subset.csv` file, and assign it to the name `points`. This is a subset of the `DartPoints` dataset which is stored in the `archdata` package. It contains numerical and categorical observations on 78 Archaic dart points recovered during surface surveys at Fort Hood, Texas. 
+
+You want to build a model that predicts the weight of the artifacts from a combination of measurements of length and weight of the artifacts. 
+
+#### Q2.1. Start by reading in the data. Save it as `points`. Then, take a look at it to understand its structure
+
+```{r}
+points <- ---("DartPoints-subset.csv")
+---(points)
+```
+
+#### Q2.2. Visualize the relationship between each of the predictors and the outcome. Use two separate plots, paying attention to which variable goes onto which axis, and making sure to fit a linear line to each plot.
+
+```{r}
+ggplot(---)
+
+ggplot(---)
+
+```
+
+#### Q2.3. Based on the plots, does your data seem to meet the linear relationship and homoscedasiticity assumptions?
+
+
+#### Q2.4. Fit the regression model as specified in the prompt. Assign the result to the name `reg2`
+
+```{r}
+reg2 <- ---
+```
+
+#### Q2.5. Does your regression meets the normality of residuals assumption?
+
+Yes, or close enough.
+
+```{r}
+---(---)
+```
+
+#### Q2.6. Interpret the coefficients for Length and Width.
+
+
+
+
+```{r}
+---(reg2)
+```
+
+#### Q2.6. Interpret the meaning of the R-squared for this model
+Note: You are looking for the unadjusted value
+
+
+```{r}
+---(reg2)
+```
+
+
+#### Q2.7. You now receive five new points. They have the length and width measurements specified in the following vectors called `Length` and `Width`. Use your regression model to predict new values of `Weight` for these 5 artifacts.
+
+```{r}
+Length <- c(31, 35, 34, 50, 54)
+Width <- c(15, 18, 20, 26, 28)
+
+
+```
+
+#### Q2.8. Now predict estimated weight values for the original data (`points`). Include a 95% prediction interval. Bind the predicted data to the original data, and save the resulting dataframe as `points.fitted`  
+
+```{r}
+points.fitted <- predict(---)%>% 
+  cbind(points, .)
+
+```
+
+#### Q2.9. Use `mutate` to create a new column called `correct.est`. Code this new column as follows: it should be coded as `"Correct"` if the true value of `Weight` falls in the 95% prediction interval, and `"Not Correct"` if the true value of `Weight` does not fall in the 95% prediction interval. Make sure to save the new dataframe so. you can use this column.
+Hint: use an `ifelse()` statement and two conditional statements!
+
+```{r}
+--- <- --- %>% 
+  mutate(--- = ---)
+
+```
+
+#### Q2.10. Create a plot that shows the relationship between width and weight. Add a smoothed linear line. Add points onto the scatter plot, and color them by your new `correct.est` variable in order to see which original datapoints were correctly/incorrectly estimated by the model.
+
+```{r}
+
+
+```
+
+#### Q2.11. Using the previous plot, answer these questions. How many points were incorrectly estimated by the model? Are they evenly distributed throughout the range of `Width`, one of the predictor variables, and if not, on which part of the values of `Width` are they? What might explain why they are not distributed throughout the range of the values of `Width`?
+
+
+
+
