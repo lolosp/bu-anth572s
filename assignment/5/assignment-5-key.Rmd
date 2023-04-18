@@ -43,6 +43,8 @@ Snodgrass %>%
 
 #### Q1.3. Create a visualization that compares the distribution of pithouse size by whether or not the pithouse is located within the inner wall *(1pt)*
 
+Boxplot and/or histogram ok
+
 ```{r}
 ggplot(Snodgrass, aes(x = Inside, y = Area))+
   geom_boxplot()
@@ -68,6 +70,8 @@ fit1 <- glm(Inside_bin ~ Area, data = Snodgrass, family = binomial)
 #### Q1.6. Print the summary of `fit1`. Is Area associated with whether a house is located inside or outside the walls? Is this a positive or an inverse association?
 *(1pt)*
 
+Area is significantly associated with the chance of beign inside the wall, and this is a positive association.
+
 ```{r}
 summary(fit1)
 ```
@@ -76,12 +80,18 @@ summary(fit1)
 
 For every increase of 1 unit of Area, the odds of being located inside the walls are 1.035 the odds at baseline.
 
+Or, for every increase of 1 unit in Area, the odds of beign located inside the walls multiply by 1.035. 
+
+Or, for every increase of 1 unit in Area, the odds of being located inside the walls increase by 3.5%
+
 ```{r}
 exp(coef(fit1))
 ```
 
 #### Q1.8. Predict the probability of a house with an Area of 350 being located Inside the walls. Look at the summary statistics and visualizations you made earlier. Given those, and that you predicted location for a house with an area of 350, does the probability you predicted make sense? Why or why not?
 *(2pt, 1 for the prediction and 1 for the contextualization of the probability)*
+
+The probability is 0.97. This makes sense because a house of 350 fits outside of the range of area for houses outside the wall, and well within the range for houses within the walls, so it makes sense that the model predicts almost 100% chance of being located within the walls.
 
 ```{r}
 newdata <- data.frame(Area = 350)
@@ -91,14 +101,14 @@ predict(fit1, newdata, type = "response")
 
 
 
-Problem 2: Odds of a successful hunt in the Ache *(5pts)*
+## Problem 2: Odds of a successful hunt in the Ache *(5pts)*
 
 Let's return to the Ache data set once more. This time, we will work with an abbreviated version of the dataset. This subset only includes one hunt per Ache man, and only includes hunts for which duration of the hunt is not missing.
 
 Read in the dataset, which is contained in the `ache-subset.csv` file.  
 
 ```{r}
-ache <- ache_hunting
+ache <- read.csv("ache-subset.csv")
 str(ache)
 ```
 
@@ -124,7 +134,11 @@ summary(fit2)
 
 #### Q2.3. Interpret the coefficient for age. *(1pt)*
 
-For every increase of 1 year in age, the odds of the hunt being successful are 1.03 times th
+For every increase of 1 year in age, the odds of the hunt being successful are 1.03 times those at baseline
+
+Or, for eery increase of 1 year in age, the odds of the hunt being successful multiply by 1.03 times
+
+Or, for every increase of 1 year in age, the odds of the hunt being successful increase by 3%
 
 ```{r}
 exp(coef(fit2))
@@ -132,10 +146,12 @@ exp(coef(fit2))
 
 #### Q2.4. Predict the probability of the hunt being successful for two hunters, one aged 40 and the other aged 50. Hold the duration of the hunt constant at the median duration from the sample. *(1pt)*
 
+In future iterations this should probably be 2pts
+
 ```{r}
 median(ache$hours)
 
-newdata <- data.frame(age = c(30, 40, 50), 
+newdata <- data.frame(age = c(40, 50), 
                       hours = 7.1)
 
 predict(fit2, newdata, type = "response")

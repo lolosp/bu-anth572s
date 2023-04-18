@@ -58,7 +58,7 @@ head(Snodgrass)
 
 ```
 
-#### Q1.6. Print the summary of `fit1`. Is Area associated with whether a house is located inside or outside the walls? Is this a positive or an inverse association?
+#### Q1.6. Print the summary of `fit1`. Is Area associated with whether a house is located inside the walls? Is this a positive or an inverse association?
 
 ```{r}
 
@@ -82,7 +82,7 @@ head(Snodgrass)
 
 
 
-Problem 2: Odds of a successful hunt in the Ache
+## Problem 2: Odds of a successful hunt in the Ache
 
 Let's return to the Ache data set once more. This time, we will work with an abbreviated version of the dataset. This subset only includes one hunt per Ache man, and only includes hunts for which duration of the hunt is not missing.
 
