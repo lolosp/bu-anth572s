@@ -29,6 +29,8 @@ pkg.list <- c("tidyverse",
               "table1",
               "titanic",
               "shiny",
+              "survival", 
+              "survminer",
               "swirl",
               "zooaRch"
 )
@@ -39,4 +41,5 @@ remotes::install_github("geanes/bioanth")
 remotes::install_github("benmarwick/binford") 
 remotes::install_github("benmarwick/evoarchdata") 
 remotes::install_github("jvcasillas/untidydata") 
+remotes::install_github("RobinDenz1/contsurvplot")
 
